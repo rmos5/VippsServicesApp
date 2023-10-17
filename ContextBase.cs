@@ -9,6 +9,8 @@ namespace Context
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        protected IUIService UIService { get;}
+
         protected string title;
         public string Title
         {
@@ -26,8 +28,9 @@ namespace Context
             }
         }
 
-        protected ContextBase() 
+        protected ContextBase(IUIService uiService) 
         {
+            UIService = uiService ?? throw new ArgumentNullException(nameof(uiService));
             title = SetTitle();
         }
 

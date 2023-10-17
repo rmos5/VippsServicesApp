@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using VippsApi;
 
 namespace VippsServicesApp.Services
 {
-    public interface IPaymentService<TPayment, TVoidPayment>
+    public interface IPaymentService<TPayment, TPaymentResponse> : IService
     {
-        void DoPayment(TPayment payment);
-        void VoidPayment(TVoidPayment payment);
+        CreatePaymentResponse DoPayment(CreatePaymentRequest paymentRequest);
     }
 }

@@ -8,6 +8,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type=contexts:PaymentContext}">
     <Grid>
-        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontWeight="Bold" Content="Payment"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Pay" Width="120" Height="40" Command="{Binding PaymentCommand}"/>
+        <Label Grid.Row="1">Payment</Label>
     </Grid>
 </local:ContextViewBase>

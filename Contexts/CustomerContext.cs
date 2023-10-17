@@ -4,7 +4,7 @@ namespace VippsServicesApp.Contexts
 {
     public partial class CustomerContext : ContextBase
     {
-        public CustomerContext()
+        public CustomerContext(IUIService uiService) : base(uiService)
         {
         }
 

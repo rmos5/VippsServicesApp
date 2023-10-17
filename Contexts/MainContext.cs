@@ -40,7 +40,7 @@ namespace VippsServicesApp.Contexts
         public SettingsContext SettingsContext { get; }
         public PaymentContext PaymentContext { get; }
 
-        public MainContext(LogContext logContext, SettingsContext settingsContext, PaymentContext paymentContext)
+        public MainContext(IUIService uiService, LogContext logContext, SettingsContext settingsContext, PaymentContext paymentContext) : base(uiService)
         {
             LogContext = logContext ?? throw new ArgumentNullException(nameof(logContext));
             SettingsContext = settingsContext ?? throw new ArgumentNullException(nameof(settingsContext));

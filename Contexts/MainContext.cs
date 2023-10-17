@@ -1,141 +1,62 @@
 ﻿using Context;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using VippsApi;
 using VippsServicesApp.Properties;
 
 namespace VippsServicesApp.Contexts
 {
     public partial class MainContext : ContextBase
     {
-        private sealed class PaymentCommandImpl : CommandBase<MainContext>
+        private int defaultIndex = Settings.Default.MainViewDefaultIndex;
+        public int DefaultIndex
         {
-            public PaymentCommandImpl(MainContext context) : base(context)
-            {
-            }
-
-            public override bool CanExecute(object parameter)
-            {
-                return Context.CanExecutePaymentCommand(parameter);
-            }
-
-            public async override void Execute(object parameter)
-            {
-                await Context.ExecutePaymentCommand(parameter);
-            }
-        }
-
-        private int selectedContextIndex = Settings.Default.SelectedMainViewIndex;
-
-        public int SelectedContextIndex
-        {
-            get => selectedContextIndex;
+            get => defaultIndex;
             set
             {
-                if (value != selectedContextIndex)
+                if (value != defaultIndex)
                 {
-                    selectedContextIndex = value;
-                    Settings.Default.SelectedMainViewIndex = value;
+                    defaultIndex = value;
+                    Settings.Default.MainViewDefaultIndex = (int)value;
                     OnPropertyChanged();
                 }
             }
         }
 
+        private int selectedtIndex = Settings.Default.MainViewDefaultIndex;
+        public int SelectedIndex
+        {
+            get => selectedtIndex;
+            set
+            {
+                if (value != selectedtIndex)
+                {
+                    selectedtIndex = value;
+                    Settings.Default.MainViewDefaultIndex = (int)value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public CommandBase PaymentCommand { get; }
         public LogContext LogContext { get; }
         public SettingsContext SettingsContext { get; }
         public PaymentContext PaymentContext { get; }
-
-        protected override string SetTitle()
-        {
-            return "Vipps Services";
-        }
 
         public MainContext(LogContext logContext, SettingsContext settingsContext, PaymentContext paymentContext)
         {
             LogContext = logContext ?? throw new ArgumentNullException(nameof(logContext));
             SettingsContext = settingsContext ?? throw new ArgumentNullException(nameof(settingsContext));
             PaymentContext = paymentContext ?? throw new ArgumentNullException(nameof(paymentContext));
-
-            PaymentCommand = new PaymentCommandImpl(this);
         }
 
-        private bool CanExecutePaymentCommand(object parameter)
+        protected override string SetTitle()
         {
-            return true;
+            return "Vipps Services";
         }
 
-        private async Task ExecutePaymentCommand(object parameter)
+        internal void OnViewClosed()
         {
-            string description = "First receipt to pay";
-            Currency currency = Currency.EUR;
-            long lAmount = 10;
-            Amount amount = new Amount
-            {
-                Currency = currency,
-                Value = lAmount
-            };
-
-            Customer customer = new Customer
-            {
-                AdditionalProperties = new Dictionary<string, object>
-                {
-                    { "Name", "Name1" },
-                    { "CustomerId", "CustomerId1"}
-                }
-            };
-
-            PaymentMethod paymentMethod = new PaymentMethod
-            {
-                Type = PaymentMethodType.WALLET
-            };
-
-            QrFormat qrFormat = new QrFormat
-            {
-                Format = QrFormatFormat.TEXT_TARGETURL
-            };
-
-            CreatePaymentRequest paymentRequest = new CreatePaymentRequest
-            {
-                Amount = amount,
-                Customer = customer,
-                PaymentDescription = description,
-                PaymentMethod = paymentMethod,
-                UserFlow = CreatePaymentRequestUserFlow.PUSH_MESSAGE,
-            };
-
-            string address = "";
-            Uri baseAddres = new Uri(address, UriKind.Absolute);
-
-            TimeSpan paymentTimeout = TimeSpan.FromSeconds(60);
-
-            HttpClient client = new HttpClient
-            {
-                BaseAddress = baseAddres,
-                Timeout = paymentTimeout
-            };
-
-            string idempotency_Key = Guid.NewGuid().ToString();
-            string ocp_Apim_Subscription_Key = "";
-            string merchant_Serial_Number = "";
-            string vipps_System_Name = "";
-            string vipps_System_Version = "";
-            string vipps_System_Plugin_Name = "";
-            string vipps_System_Plugin_Version = "";
-
-            EPayment service = new EPayment(client);
-            CreatePaymentResponse paymentResponse = await service.CreatePaymentAsync
-                (paymentRequest,
-                idempotency_Key,
-                ocp_Apim_Subscription_Key,
-                merchant_Serial_Number,
-                vipps_System_Name,
-                vipps_System_Version,
-                vipps_System_Plugin_Name,
-                vipps_System_Plugin_Version);
+            if (SelectedIndex == 0
+                || SelectedIndex == 1)
+                SelectedIndex = DefaultIndex;
         }
     }
 }

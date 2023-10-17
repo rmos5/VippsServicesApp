@@ -3,11 +3,11 @@
 namespace VippsServicesApp.Views
 {
     /// <summary>
-    /// Interaction logic for LogView.xaml
+    /// Interaction logic for MainView.xaml
     /// </summary>
-    public partial class LogView : ContextViewBase<LogContext>
+    public partial class MainView : ContextViewBase<MainContext>
     {
-        public LogView()
+        public MainView()
         {
             InitializeComponent();
         }

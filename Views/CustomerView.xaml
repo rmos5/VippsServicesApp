@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="VippsServicesApp.Views.CustomerView"
+﻿<local:ContextViewBase x:TypeArguments="contexts:CustomerContext" x:Class="VippsServicesApp.Views.CustomerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,4 +10,4 @@
     <Grid>
         <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" FontWeight="Bold" Content="Customer"/>
     </Grid>
-</UserControl>
+</local:ContextViewBase>

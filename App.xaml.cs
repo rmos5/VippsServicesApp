@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using System.ComponentModel;
 using System.Windows;
 using VippsServicesApp.Contexts;
-using VippsServicesApp.Views;
 
 namespace VippsServicesApp
 {
@@ -11,7 +10,7 @@ namespace VippsServicesApp
     /// </summary>
     public partial class App : Application
     {
-        private MainContext MainContext => _host.Services.GetService<MainContext>();
+        private MainContext MainContext { get; set; }
 
         public App()
         {
@@ -19,31 +18,24 @@ namespace VippsServicesApp
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            IHostBuilder builder = Host.CreateDefaultBuilder();
-
-            builder.ConfigureServices((hostContext, services) =>
-            {
-                services.AddSingleton<LogContext>();
-                services.AddSingleton<SettingsContext>();
-                services.AddSingleton<PaymentContext>();
-                services.AddTransient<CustomerContext>();
-                services.AddSingleton<MainContext>();
-                services.AddSingleton<MainWindow>();
-            });
-            
-            _host = builder.Build();
-            _host.Start();
-
-            MainWindow = _host.Services.GetRequiredService<MainWindow>();
+            StartDI();
+            MainContext = _host.Services.GetRequiredService<MainContext>();
+            MainWindow = new MainWindow();
+            MainWindow.DataContext = MainContext;
+            MainWindow.Closing += MainWindow_Closing;
             MainWindow.Show();
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _host.StopAsync().GetAwaiter().GetResult();
-            _host.Dispose();
-
+            StopDI();
             base.OnExit(e);
         }
+
     }
 }

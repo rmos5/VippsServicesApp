@@ -25,13 +25,25 @@ namespace VippsServicesApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int SelectedMainViewIndex {
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int MainViewDefaultIndex {
             get {
-                return ((int)(this["SelectedMainViewIndex"]));
+                return ((int)(this["MainViewDefaultIndex"]));
             }
             set {
-                this["SelectedMainViewIndex"] = value;
+                this["MainViewDefaultIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int MainViewSelectedIndex {
+            get {
+                return ((int)(this["MainViewSelectedIndex"]));
+            }
+            set {
+                this["MainViewSelectedIndex"] = value;
             }
         }
     }

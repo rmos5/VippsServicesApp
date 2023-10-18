@@ -33,21 +33,6 @@ namespace Context
         //}
     }
 
-    public abstract class LoggedInCommandBase<T> : CommandBase<T>
-        where T : ContextBase
-    {
-        protected LoggedInCommandBase(T context)
-            : base(context)
-        {
-        }
-
-        //public override bool CanExecute(object parameter)
-        //{
-        //    return base.CanExecute(parameter)
-        //        && Context.IsLoggedIn;
-        //}
-    }
-
     //note: used for a menu item enabled/disabled binding
     public class EmptyCommand : CommandBase<ContextBase>
     {
@@ -65,28 +50,4 @@ namespace Context
         {
         }
     }
-    
-    //public class CloseDialogCommand : CommandBase<ContextBase>
-    //{
-    //    protected bool DialogResult { get; }
-
-    //    protected Func<bool> CanExecuteFunc { get; }
-
-    //    public CloseDialogCommand(ContextBase context, bool dialogResult, Func<bool> canExecuteFunc = null)
-    //        : base(context)
-    //    {
-    //        DialogResult = dialogResult;
-    //        CanExecuteFunc = canExecuteFunc;
-    //    }
-
-    //    public override bool CanExecute(object parameter)
-    //    {
-    //        return CanExecuteFunc == null || CanExecuteFunc.Invoke();
-    //    }
-
-    //    public override void Execute(object parameter)
-    //    {
-    //        Context.UIService.CloseDialog(DialogResult);
-    //    }
-    //}
 }

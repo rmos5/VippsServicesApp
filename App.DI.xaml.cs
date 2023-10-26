@@ -15,7 +15,7 @@ namespace VippsServicesApp
         {
             services.AddSingleton<VippsServiceSettings>();
             services.AddTransient<VippsPaymentService>();
-            services.AddTransient((sp) => CreateContext<LogContext>(sp));
+            services.AddSingleton((sp) => CreateContext<LogContext>(sp));
             services.AddSingleton((sp) => CreateContext<SettingsContext>(sp));
             services.AddTransient((sp) => CreateContext<PaymentContext>(sp));
             services.AddTransient((sp) => CreateContext<CustomerContext>(sp));

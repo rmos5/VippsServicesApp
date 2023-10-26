@@ -1,10 +1,11 @@
 ﻿using Context;
+using System;
 
 namespace VippsServicesApp.Contexts
 {
     public partial class SettingsContext : ContextBase
     {
-        public SettingsContext(IUIService uiService) : base(uiService)
+        public SettingsContext(IServiceProvider serviceProvider) : base(serviceProvider) 
         {
         }
 

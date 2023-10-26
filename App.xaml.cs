@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel;
+using System.Extensions;
 using System.Windows;
 using VippsServicesApp.Contexts;
 
@@ -31,7 +32,7 @@ namespace VippsServicesApp
 
         public void ShowErrorDialog(string message, Exception exception, string dialogTitle)
         {
-            MessageBox.Show(MainWindow, $"{message}\n{exception.Message}", dialogTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(MainWindow, $"{message}\n{exception.GetAllMessages()}", dialogTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
 

@@ -13,20 +13,14 @@ namespace VippsServicesApp
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IServiceFactory, ServiceFactory>();
             services.AddSingleton<VippsServiceSettings>();
-            services.AddTransient<IVippsPaymentService, VippsPaymentService>();
+            services.AddTransient<VippsPaymentService>();
             services.AddTransient<LogContext>();
             services.AddSingleton<SettingsContext>();
             services.AddTransient<PaymentContext>();
             services.AddTransient<CustomerContext>();
             services.AddSingleton<MainContext>();
             services.AddSingleton<IUIService>(this);
-        }
-
-        private IUIService GetUIService(IServiceProvider provider)
-        {
-            return MainWindow as IUIService;
         }
 
         private void StartDI()

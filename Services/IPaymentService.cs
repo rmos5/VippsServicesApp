@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
-using VippsApi;
-
-namespace VippsServicesApp.Services
+﻿namespace VippsServicesApp.Services
 {
-    public interface IPaymentService<TPayment, TPaymentResponse> : IService
+    public interface IPaymentServicee<TSettings, TPaymentRequest, TPaymentResponse, TCapturePaymentRequest, TCapturePaymentResponse, TCancelPaymentRequest, TCancelPaymentResponse, TRefundRequest, TRefundResponse>
+        where TSettings : class
     {
-        CreatePaymentResponse DoPayment(CreatePaymentRequest paymentRequest);
+        TPaymentResponse RequestPayment(TPaymentRequest paymentRequest);
+        TCapturePaymentResponse CapturePayment(TCapturePaymentRequest capturePaymentRequest);
+        TCancelPaymentRequest CancelPayment(TCancelPaymentRequest cancelPaymentRequest);
+        TRefundRequest RefundPayment(TRefundRequest refundRequest);
     }
 }

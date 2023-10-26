@@ -1,10 +1,11 @@
 ﻿using Context;
+using System;
 
 namespace VippsServicesApp.Contexts
 {
     public partial class LogContext : ContextBase
     {
-        public LogContext(IUIService uiService) : base(uiService)
+        public LogContext(IServiceProvider serviceProvider) : base(serviceProvider)
         {     
         }
 

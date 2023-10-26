@@ -1,4 +1,5 @@
 ﻿using Context;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using VippsApi;
@@ -25,15 +26,12 @@ namespace VippsServicesApp.Contexts
             }
         }
 
-        protected VippsServiceSettings Settings { get; }
-
-        protected IServiceFactory ServiceFactory { get; }
+        private VippsPaymentService PaymentService => ServiceProvider.GetRequiredService<VippsPaymentService>();
 
         public CommandBase PaymentCommand { get; }
 
-        public PaymentContext(IUIService uiService, IServiceFactory serviceFactory) : base(uiService)
-        {
-            ServiceFactory = serviceFactory ?? throw new ArgumentNullException(nameof(serviceFactory));
+        public PaymentContext(IServiceProvider serviceProvider) : base(serviceProvider)
+        {            
             PaymentCommand = new PaymentCommandImpl(this);
         }
         
@@ -88,8 +86,7 @@ namespace VippsServicesApp.Contexts
                     UserFlow = CreatePaymentRequestUserFlow.PUSH_MESSAGE,
                 };
 
-                IVippsPaymentService service = ServiceFactory.GetService<IVippsPaymentService>();
-                service.DoPayment(paymentRequest);
+                PaymentService.RequestPayment(paymentRequest);
             }
             catch (Exception ex)
             {

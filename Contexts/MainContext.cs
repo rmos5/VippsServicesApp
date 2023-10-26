@@ -1,4 +1,5 @@
 ﻿using Context;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using VippsServicesApp.Properties;
 
@@ -36,15 +37,12 @@ namespace VippsServicesApp.Contexts
             }
         }
 
-        public LogContext LogContext { get; }
-        public SettingsContext SettingsContext { get; }
-        public PaymentContext PaymentContext { get; }
+        public LogContext LogContext => ServiceProvider.GetRequiredService<LogContext>();
+        public SettingsContext SettingsContext => ServiceProvider.GetRequiredService<SettingsContext>();
+        public PaymentContext PaymentContext => ServiceProvider.GetRequiredService<PaymentContext>();
 
-        public MainContext(IUIService uiService, LogContext logContext, SettingsContext settingsContext, PaymentContext paymentContext) : base(uiService)
+        public MainContext(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            LogContext = logContext ?? throw new ArgumentNullException(nameof(logContext));
-            SettingsContext = settingsContext ?? throw new ArgumentNullException(nameof(settingsContext));
-            PaymentContext = paymentContext ?? throw new ArgumentNullException(nameof(paymentContext));
         }
 
         protected override string SetTitle()

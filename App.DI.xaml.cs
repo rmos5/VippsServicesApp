@@ -15,12 +15,20 @@ namespace VippsServicesApp
         {
             services.AddSingleton<VippsServiceSettings>();
             services.AddTransient<VippsPaymentService>();
-            services.AddTransient<LogContext>();
-            services.AddSingleton<SettingsContext>();
-            services.AddTransient<PaymentContext>();
-            services.AddTransient<CustomerContext>();
-            services.AddSingleton<MainContext>();
+            services.AddTransient((sp) => CreateContext<LogContext>(sp));
+            services.AddSingleton((sp) => CreateContext<SettingsContext>(sp));
+            services.AddTransient((sp) => CreateContext<PaymentContext>(sp));
+            services.AddTransient((sp) => CreateContext<CustomerContext>(sp));
+            services.AddSingleton((sp) => CreateContext<MainContext>(sp));
             services.AddSingleton<IUIService>(this);
+        }
+
+        private T CreateContext<T>(IServiceProvider serviceProvider)
+            where T: ContextBase, new()
+        {
+            T result = new T();
+            result.ServiceProvider = serviceProvider;
+            return result;
         }
 
         private void StartDI()

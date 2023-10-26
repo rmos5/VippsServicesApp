@@ -30,7 +30,7 @@ namespace VippsServicesApp.Contexts
 
         public CommandBase PaymentCommand { get; }
 
-        public PaymentContext(IServiceProvider serviceProvider) : base(serviceProvider)
+        public PaymentContext()
         {            
             PaymentCommand = new PaymentCommandImpl(this);
         }

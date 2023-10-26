@@ -41,10 +41,6 @@ namespace VippsServicesApp.Contexts
         public SettingsContext SettingsContext => ServiceProvider.GetRequiredService<SettingsContext>();
         public PaymentContext PaymentContext => ServiceProvider.GetRequiredService<PaymentContext>();
 
-        public MainContext(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
-
         protected override string SetTitle()
         {
             return "Vipps Services";

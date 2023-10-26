@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:VippsServicesApp.Views"
              xmlns:contexts="clr-namespace:VippsServicesApp.Contexts"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type=contexts:MainContext}">
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type=contexts:MainContext, IsDesignTimeCreatable=True}">
 
     <TabControl SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
         <TabItem DataContext="{Binding LogContext}" Header="{Binding Title}" d:Header="Log">

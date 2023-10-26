@@ -74,7 +74,10 @@ namespace System.Extensions
                 }
 
                 //todo: AggregateException omitted for this implementation
-
+                if (error is AggregateException)
+                {
+                }
+                 
                 error = error.InnerException;
             }
 

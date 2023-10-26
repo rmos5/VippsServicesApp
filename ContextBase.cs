@@ -10,7 +10,7 @@ namespace Context
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected IServiceProvider ServiceProvider { get; }
+        internal IServiceProvider ServiceProvider { get; set; }
 
         protected IUIService UIService => ServiceProvider.GetRequiredService<IUIService>();
 
@@ -31,9 +31,8 @@ namespace Context
             }
         }
 
-        protected ContextBase(IServiceProvider serviceProvider) 
+        protected ContextBase() 
         {
-            ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             title = SetTitle();
         }
 

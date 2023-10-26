@@ -10,7 +10,11 @@ namespace Context
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal IServiceProvider ServiceProvider { get; set; }
+        /// <summary>
+        /// Crucial property to be set for <see cref="ContextBase"/> instances. 
+        /// All services is designed to be constructed using through this object instance e.g. <see cref="IServiceProvider.GetService(Type)"/> and extension methods.
+        /// </summary>
+        public IServiceProvider ServiceProvider { get; set; }
 
         protected IUIService UIService => ServiceProvider.GetRequiredService<IUIService>();
 

@@ -9,13 +9,13 @@
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type=contexts:MainContext, IsDesignTimeCreatable=True}">
 
     <TabControl SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
-        <TabItem DataContext="{Binding LogContext}" Header="{Binding Title}" d:Header="Log">
+        <TabItem DataContext="{Binding LogContext}" Header="{Binding Title}" d:Header="Log" d:DataContext="{d:DesignInstance contexts:LogContext, IsDesignTimeCreatable=True}">
             <local:LogView/>
         </TabItem>
-        <TabItem DataContext="{Binding SettingsContext}" Header="{Binding Title}" d:Header="Settings">
+        <TabItem DataContext="{Binding SettingsContext}" Header="{Binding Title}" d:Header="Settings" d:DataContext="{d:DesignInstance contexts:SettingsContext, IsDesignTimeCreatable=True}">
             <local:SettingsView/>
         </TabItem>
-        <TabItem DataContext="{Binding PaymentContext}" Header="{Binding Title}" d:Header="Payment" d:IsSelected="True">
+        <TabItem DataContext="{Binding PaymentContext}" Header="{Binding Title}" d:Header="Payment" d:IsSelected="True" d:DataContext="{d:DesignInstance contexts:PaymentContext, IsDesignTimeCreatable=True}">
             <local:PaymentView/>
         </TabItem>
     </TabControl>

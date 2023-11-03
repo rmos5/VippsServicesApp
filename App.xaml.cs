@@ -21,7 +21,7 @@ namespace VippsServicesApp
         {
             StartDI(e.Args);
             MainWindow = new MainWindow();
-            MainWindow.DataContext = Host.Services.GetRequiredService<MainContext>();
+            MainWindow.DataContext = _host.Services.GetRequiredService<MainContext>();
             MainWindow.Closing += MainWindow_Closing;
             MainWindow.Show();
         }
@@ -30,7 +30,6 @@ namespace VippsServicesApp
         {
             MessageBox.Show(MainWindow, $"{message}\n{exception.GetAllMessages()}", dialogTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
-
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {

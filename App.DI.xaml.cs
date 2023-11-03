@@ -1,6 +1,8 @@
 ﻿using Context;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 
@@ -8,7 +10,13 @@ namespace VippsServicesApp
 {
     public partial class App
     {
-        private static IHost Host { get; set; }
+        private static IHost _host { get; set; }
+
+        private void ConfigureLogging(ILoggingBuilder logging)
+        {
+            logging.ClearProviders();
+            logging.AddDebug();
+        }
 
         private void ConfigureServices(IServiceCollection services)
         {
@@ -26,16 +34,24 @@ namespace VippsServicesApp
 
         private void StartDI(string[] args)
         {
-            HostApplicationBuilder builder = Microsoft.Extensions.Hosting.Host.CreateApplicationBuilder(args);
-            ConfigureServices(builder.Services);
-            Host = builder.Build();
-            Host.Start();
+            IHostBuilder builder = Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    ConfigureLogging(logging);
+                })
+                .ConfigureServices(services =>
+                {
+                    ConfigureServices(services);
+                });
+
+            _host = builder.Build();
+            _host.Start();
         }
 
         private void StopDI()
         {
-            Host.StopAsync().GetAwaiter().GetResult();
-            Host.Dispose();
+            _host.StopAsync().GetAwaiter().GetResult();
+            _host.Dispose();
         }
     }
 }

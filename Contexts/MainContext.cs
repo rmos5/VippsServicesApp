@@ -18,7 +18,7 @@ namespace VippsServicesApp.Contexts
                 if (value != defaultIndex)
                 {
                     defaultIndex = value;
-                    Settings.Default.MainViewDefaultIndex = (int)value;
+                    Settings.Default.MainViewDefaultIndex = value;
                     OnPropertyChanged();
                 }
             }
@@ -65,8 +65,7 @@ namespace VippsServicesApp.Contexts
 
         internal void OnViewClosed()
         {
-            if (SelectedIndex == 0
-                || SelectedIndex == 1)
+            if (SelectedIndex == 0)
                 SelectedIndex = DefaultIndex;
         }
     }

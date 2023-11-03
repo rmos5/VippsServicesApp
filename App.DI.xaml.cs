@@ -1,8 +1,8 @@
 ﻿using Context;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
+using Serilog;
+using Serilog.Events;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 
@@ -11,12 +11,6 @@ namespace VippsServicesApp
     public partial class App
     {
         private static IHost _host { get; set; }
-
-        private void ConfigureLogging(ILoggingBuilder logging)
-        {
-            logging.ClearProviders();
-            logging.AddDebug();
-        }
 
         private void ConfigureServices(IServiceCollection services)
         {
@@ -34,17 +28,17 @@ namespace VippsServicesApp
 
         private void StartDI(string[] args)
         {
-            IHostBuilder builder = Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging =>
+            _host = Host.CreateDefaultBuilder(args)
+                .UseSerilog((host, logConfig) =>
                 {
-                    ConfigureLogging(logging);
+                    logConfig.WriteTo.Debug(LogEventLevel.Debug);
+                    logConfig.WriteTo.File("Logs/VippsServicesApp.log", LogEventLevel.Debug, rollingInterval: RollingInterval.Hour);
                 })
                 .ConfigureServices(services =>
                 {
                     ConfigureServices(services);
-                });
-
-            _host = builder.Build();
+                })
+                .Build();
             _host.Start();
         }
 

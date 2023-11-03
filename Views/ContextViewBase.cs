@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace VippsServicesApp.Views
 {
-    public class ContextViewBase<TContext> : UserControl
+    public class ContextViewBase<TContext> : UserControl, IView
         where TContext : ContextBase
     {
         public new TContext DataContext

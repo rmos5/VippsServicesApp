@@ -13,22 +13,18 @@ namespace VippsServicesApp
     /// </summary>
     public partial class App : Application, IUIService
     {
-        private MainContext MainContext { get; set; }
-
         public App()
         {
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            StartDI();
-            MainContext = _host.Services.GetRequiredService<MainContext>();
+            StartDI(e.Args);
             MainWindow = new MainWindow();
-            MainWindow.DataContext = MainContext;
+            MainWindow.DataContext = Host.Services.GetRequiredService<MainContext>();
             MainWindow.Closing += MainWindow_Closing;
             MainWindow.Show();
         }
-
 
         public void ShowErrorDialog(string message, Exception exception, string dialogTitle)
         {
@@ -38,7 +34,7 @@ namespace VippsServicesApp
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            
+
         }
 
         protected override void OnExit(ExitEventArgs e)

@@ -31,7 +31,15 @@ namespace VippsServicesApp.Services
         }
     }
 
-    internal class VippsPaymentService : PaymentServiceBase<VippsServiceSettings, CreatePaymentRequest, CreatePaymentResponse, CaptureModificationRequest, ModificationResponse, string, ModificationResponse, RefundModificationRequest, ModificationResponse>
+    public interface IVippsPaymentService
+    {
+        string CancelPayment(string cancelPaymentRequest);
+        ModificationResponse CapturePayment(CaptureModificationRequest capturePaymentRequest);
+        RefundModificationRequest RefundPayment(RefundModificationRequest refundRequest);
+        CreatePaymentResponse RequestPayment(CreatePaymentRequest paymentRequest);
+    }
+
+    internal class VippsPaymentService : PaymentServiceBase<VippsServiceSettings, CreatePaymentRequest, CreatePaymentResponse, CaptureModificationRequest, ModificationResponse, string, ModificationResponse, RefundModificationRequest, ModificationResponse>, IVippsPaymentService
     {
         public VippsPaymentService(VippsServiceSettings settings) : base(settings)
         {

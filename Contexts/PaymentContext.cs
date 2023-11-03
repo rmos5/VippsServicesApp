@@ -1,7 +1,8 @@
 ﻿using Context;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Extensions;
 using VippsApi;
 using VippsServicesApp.Services;
 
@@ -26,15 +27,25 @@ namespace VippsServicesApp.Contexts
             }
         }
 
-        private VippsPaymentService PaymentService => ServiceProvider.GetRequiredService<VippsPaymentService>();
+        private ILogger<PaymentContext> Logger { get; }
+
+        private IVippsPaymentService PaymentService { get; }
 
         public CommandBase PaymentCommand { get; }
 
         public PaymentContext()
-        {            
+        {
+            //note: for UI designer
+        }
+
+        public PaymentContext(IUIService uiService, ILogger<PaymentContext> logger, IVippsPaymentService paymentService)
+            : base(uiService)
+        {    
+            PaymentService = paymentService;
+            Logger = logger;
             PaymentCommand = new PaymentCommandImpl(this);
         }
-        
+
         protected override string SetTitle()
         {
             return "Payment";
@@ -49,6 +60,8 @@ namespace VippsServicesApp.Contexts
         {
             try
             {
+                Logger.LogInformation($"{nameof(ExecutePaymentCommand)}...");
+
                 string description = "First receipt to pay";
                 Currency currency = Currency.EUR;
                 long lAmount = 10;
@@ -83,13 +96,14 @@ namespace VippsServicesApp.Contexts
                     Customer = customer,
                     PaymentDescription = description,
                     PaymentMethod = paymentMethod,
-                    UserFlow = CreatePaymentRequestUserFlow.PUSH_MESSAGE,
+                    UserFlow = CreatePaymentRequestUserFlow.QR,
                 };
 
-                PaymentService.RequestPayment(paymentRequest);
+                CreatePaymentResponse response = PaymentService.RequestPayment(paymentRequest);
             }
             catch (Exception ex)
             {
+                Logger.LogError(ex.GetAllMessages());
                 UIService.ShowErrorDialog("Payment failed.", ex, "Payment");
             }
         }

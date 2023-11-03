@@ -1,5 +1,5 @@
 ﻿using Context;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using VippsServicesApp.Properties;
 
@@ -7,6 +7,8 @@ namespace VippsServicesApp.Contexts
 {
     public partial class MainContext : ContextBase
     {
+        private ILogger<MainContext> Logger { get; }
+
         private int defaultIndex = Settings.Default.MainViewDefaultIndex;
         public int DefaultIndex
         {
@@ -37,9 +39,24 @@ namespace VippsServicesApp.Contexts
             }
         }
 
-        public LogContext LogContext => ServiceProvider.GetRequiredService<LogContext>();
-        public SettingsContext SettingsContext => ServiceProvider.GetRequiredService<SettingsContext>();
-        public PaymentContext PaymentContext => ServiceProvider.GetRequiredService<PaymentContext>();
+        public LogContext LogContext { get; }
+        public SettingsContext SettingsContext { get; }
+        public PaymentContext PaymentContext { get; }
+
+        public MainContext()
+        {
+            //note: for UI designer
+        }
+
+        public MainContext(IUIService uiService, ILogger<MainContext> logger, LogContext logContext, SettingsContext settingsContext, PaymentContext paymentContext)
+            : base(uiService) 
+        {
+            LogContext = logContext;
+            SettingsContext = settingsContext;
+            PaymentContext = paymentContext;
+            Logger = logger;
+            Logger.LogInformation("MainContext created.");
+        }
 
         protected override string SetTitle()
         {

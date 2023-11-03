@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using VippsServicesApp;
 
 namespace Context
 {
@@ -10,13 +11,7 @@ namespace Context
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        /// Crucial property to be set for <see cref="ContextBase"/> instances. 
-        /// All services is designed to be constructed using through this object instance e.g. <see cref="IServiceProvider.GetService(Type)"/> and extension methods.
-        /// </summary>
-        public IServiceProvider ServiceProvider { get; set; }
-
-        protected IUIService UIService => ServiceProvider.GetRequiredService<IUIService>();
+        protected IUIService UIService { get; }
 
         protected string title;
         public string Title
@@ -35,8 +30,14 @@ namespace Context
             }
         }
 
-        protected ContextBase() 
+        protected ContextBase()
         {
+            title = SetTitle();
+        }
+
+        protected ContextBase(IUIService uiService) 
+        {
+            UIService = uiService;
             title = SetTitle();
         }
 
@@ -50,6 +51,11 @@ namespace Context
                 throw new ArgumentOutOfRangeException($"Not existing properety '{propertyName}' change.", nameof(propertyName));
             PropertyChangedEventHandler e = PropertyChanged;
             e?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void ShowErrorDialog(string message, Exception error, string title)
+        {
+            UIService.ShowErrorDialog(message, error, title);
         }
 
         #region IDisposable Support

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using System;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 
@@ -11,6 +12,12 @@ namespace VippsServicesApp
     public partial class App
     {
         private static IHost _host { get; set; }
+
+        private void ConfigureLogging(HostBuilderContext host, LoggerConfiguration loggerConfiguration)
+        {
+            loggerConfiguration.WriteTo.Debug(LogEventLevel.Debug);
+            loggerConfiguration.WriteTo.File("Logs/VippsServicesApp.log", LogEventLevel.Debug, fileSizeLimitBytes: 100000, rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(100));
+        }
 
         private void ConfigureServices(IServiceCollection services)
         {
@@ -29,10 +36,9 @@ namespace VippsServicesApp
         private void StartDI(string[] args)
         {
             _host = Host.CreateDefaultBuilder(args)
-                .UseSerilog((host, logConfig) =>
+                .UseSerilog((host, loggerConfiguration) =>
                 {
-                    logConfig.WriteTo.Debug(LogEventLevel.Debug);
-                    logConfig.WriteTo.File("Logs/VippsServicesApp.log", LogEventLevel.Debug, rollingInterval: RollingInterval.Hour);
+                    ConfigureLogging(host, loggerConfiguration);
                 })
                 .ConfigureServices(services =>
                 {

@@ -55,7 +55,7 @@ namespace VippsServicesApp.Contexts
             SettingsContext = settingsContext;
             PaymentContext = paymentContext;
             Logger = logger;
-            Logger.LogInformation("MainContext created.");
+            Logger.LogInformation("Context created.");
         }
 
         protected override string SetTitle()
@@ -65,6 +65,8 @@ namespace VippsServicesApp.Contexts
 
         internal void OnViewClosed()
         {
+            Logger.LogTrace("View closed.");
+
             if (SelectedIndex == 0)
                 SelectedIndex = DefaultIndex;
         }

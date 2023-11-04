@@ -15,8 +15,9 @@ namespace VippsServicesApp
 
         private void ConfigureLogging(HostBuilderContext host, LoggerConfiguration loggerConfiguration)
         {
-            loggerConfiguration.WriteTo.Debug(LogEventLevel.Debug);
-            loggerConfiguration.WriteTo.File("Logs/VippsServicesApp.log", LogEventLevel.Debug, fileSizeLimitBytes: 100000, rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(100));
+            loggerConfiguration.MinimumLevel.Verbose();
+            loggerConfiguration.WriteTo.Debug();
+            loggerConfiguration.WriteTo.File("Logs/VippsServicesApp.log", fileSizeLimitBytes: 100000, rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(100));
         }
 
         private void ConfigureServices(IServiceCollection services)

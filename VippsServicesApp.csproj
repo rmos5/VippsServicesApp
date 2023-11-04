@@ -277,12 +277,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="appsettings.Production.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="appsettings.json" />
+    <None Include="appsettings.Production.json" />
     <None Include="epayment-swagger-id.yaml" />
     <None Include="OpenAPIs\epayment-swagger-id.yaml">
       <Namespace>VippsApi</Namespace>

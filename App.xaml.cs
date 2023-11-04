@@ -2,7 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Extensions;
+using System.Security.Principal;
+using System.Threading;
 using System.Windows;
 using VippsServicesApp.Contexts;
 
@@ -19,6 +22,11 @@ namespace VippsServicesApp
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            identity.Impersonate();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            Thread.CurrentPrincipal = principal;
+
             StartDI(e.Args);
             MainWindow = new MainWindow();
             MainWindow.DataContext = _host.Services.GetRequiredService<MainContext>();

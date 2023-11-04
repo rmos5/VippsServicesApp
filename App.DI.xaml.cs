@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using System;
+using System.IO;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 
@@ -17,7 +18,11 @@ namespace VippsServicesApp
         {
             loggerConfiguration.MinimumLevel.Verbose();
             loggerConfiguration.WriteTo.Debug();
-            loggerConfiguration.WriteTo.File("Logs/VippsServicesApp.log", fileSizeLimitBytes: 100000, rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(100));
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string appName = "VippsServicesApp";
+            string logFileName = $"{appName}.txt";
+            path = Path.Combine(path, appName, logFileName);
+            loggerConfiguration.WriteTo.File(path, fileSizeLimitBytes: 100000, rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(100));
         }
 
         private void ConfigureServices(IServiceCollection services)

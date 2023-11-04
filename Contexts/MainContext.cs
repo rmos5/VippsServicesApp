@@ -1,6 +1,6 @@
 ﻿using Context;
 using Microsoft.Extensions.Logging;
-using System;
+using System.Threading;
 using VippsServicesApp.Properties;
 
 namespace VippsServicesApp.Contexts
@@ -60,7 +60,7 @@ namespace VippsServicesApp.Contexts
 
         protected override string SetTitle()
         {
-            return "Vipps Services";
+            return $"Vipps Services ({Thread.CurrentPrincipal.Identity.Name})";
         }
 
         internal void OnViewClosed()

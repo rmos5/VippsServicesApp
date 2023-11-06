@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 using System;
 using System.IO;
+using System.Reflection;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 
@@ -14,22 +14,24 @@ namespace VippsServicesApp
     {
         private static IHost _host { get; set; }
 
-        private void ConfigureLogging(HostBuilderContext host, LoggerConfiguration loggerConfiguration)
+        private void ConfigureLogging(HostBuilderContext host, IServiceProvider serviceProvider, LoggerConfiguration loggerConfiguration)
         {
-            loggerConfiguration.MinimumLevel.Verbose();
-            loggerConfiguration.WriteTo.Debug();
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string appName = "VippsServicesApp";
-            string logFileName = $"{appName}.txt";
-            path = Path.Combine(path, appName, logFileName);
-            loggerConfiguration.WriteTo.File(path, fileSizeLimitBytes: 100000, rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(100));
+            ILoggingSettings loggingSettings = serviceProvider.GetRequiredService<ILoggingSettings>();
+            string logFileName = $"{host.HostingEnvironment.ApplicationName}.txt";
+            string loggingFilePath = Path.Combine(loggingSettings.LoggingDirectoryPath, logFileName);
+            loggerConfiguration.WriteTo.File(loggingFilePath, fileSizeLimitBytes: 100000, rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(100));
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        private void ConfigureServices(HostBuilderContext host, IServiceCollection services)
         {
+            //string loggingDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Logs");
+            string loggingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), host.HostingEnvironment.ApplicationName);//Path.Combine(loggingDirectory, "Logs"); 
+            LoggingSettings loggingSettings = new LoggingSettings(loggingDirectory);
+            services.AddSingleton<ILoggingSettings>(loggingSettings);
+
             services.AddTransient<VippsServiceSettings>();
             services.AddSingleton<IVippsPaymentService, VippsPaymentService>();
-            
+
             services.AddSingleton<MainContext>();
             services.AddSingleton<SettingsContext>();
             services.AddTransient<PaymentContext>();
@@ -42,13 +44,13 @@ namespace VippsServicesApp
         private void StartDI(string[] args)
         {
             _host = Host.CreateDefaultBuilder(args)
-                .UseSerilog((host, loggerConfiguration) =>
+                .UseSerilog((host, serviceProvider, loggerConfiguration) =>
                 {
-                    ConfigureLogging(host, loggerConfiguration);
+                    ConfigureLogging(host, serviceProvider, loggerConfiguration);
                 })
-                .ConfigureServices(services =>
+                .ConfigureServices((host, services) =>
                 {
-                    ConfigureServices(services);
+                    ConfigureServices(host, services);
                 })
                 .Build();
             _host.Start();

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
-using System.Reflection;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 
@@ -16,6 +15,7 @@ namespace VippsServicesApp
 
         private void ConfigureLogging(HostBuilderContext host, IServiceProvider serviceProvider, LoggerConfiguration loggerConfiguration)
         {
+            loggerConfiguration.MinimumLevel.Verbose();
             ILoggingSettings loggingSettings = serviceProvider.GetRequiredService<ILoggingSettings>();
             string logFileName = $"{host.HostingEnvironment.ApplicationName}.txt";
             string loggingFilePath = Path.Combine(loggingSettings.LoggingDirectoryPath, logFileName);

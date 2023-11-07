@@ -2,6 +2,6 @@
 {
     public interface ILoggingSettings
     {
-		string LoggingDirectoryPath { get; }
+        string LoggingDirectoryPath { get; }
 	}
 }

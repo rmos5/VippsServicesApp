@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
+using System.Reflection;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 
@@ -24,8 +25,8 @@ namespace VippsServicesApp
 
         private void ConfigureServices(HostBuilderContext host, IServiceCollection services)
         {
-            //string loggingDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Logs");
-            string loggingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), host.HostingEnvironment.ApplicationName);//Path.Combine(loggingDirectory, "Logs"); 
+            string loggingDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Logs");
+            //string loggingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), host.HostingEnvironment.ApplicationName);//Path.Combine(loggingDirectory, "Logs"); 
             LoggingSettings loggingSettings = new LoggingSettings(loggingDirectory);
             services.AddSingleton<ILoggingSettings>(loggingSettings);
 

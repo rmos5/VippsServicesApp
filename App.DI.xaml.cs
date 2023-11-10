@@ -1,10 +1,13 @@
 ﻿using Context;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 
@@ -16,11 +19,21 @@ namespace VippsServicesApp
 
         private void ConfigureLogging(HostBuilderContext host, IServiceProvider serviceProvider, LoggerConfiguration loggerConfiguration)
         {
-            loggerConfiguration.MinimumLevel.Verbose();
+            loggerConfiguration.ReadFrom.Configuration(host.Configuration);
+            string debugOutputTemplate = "[{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
+            loggerConfiguration.WriteTo.Debug(outputTemplate:debugOutputTemplate);
             ILoggingSettings loggingSettings = serviceProvider.GetRequiredService<ILoggingSettings>();
             string logFileName = $"{host.HostingEnvironment.ApplicationName}.txt";
             string loggingFilePath = Path.Combine(loggingSettings.LoggingDirectoryPath, logFileName);
-            loggerConfiguration.WriteTo.File(loggingFilePath, fileSizeLimitBytes: 100000, rollOnFileSizeLimit: true, rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(100));
+            string fileOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
+            loggerConfiguration.WriteTo.File
+                (loggingFilePath,
+                encoding: Encoding.UTF8,
+                fileSizeLimitBytes: 100000,
+                rollOnFileSizeLimit: true,
+                rollingInterval: RollingInterval.Hour,
+                retainedFileTimeLimit: TimeSpan.FromDays(100),
+                outputTemplate: fileOutputTemplate);
         }
 
         private void ConfigureServices(HostBuilderContext host, IServiceCollection services)
@@ -54,6 +67,8 @@ namespace VippsServicesApp
                     ConfigureServices(host, services);
                 })
                 .Build();
+            Logging.SetLoggerFactory(_host.Services.GetRequiredService<ILoggerFactory>());
+            
             _host.Start();
         }
 

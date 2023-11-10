@@ -1,5 +1,5 @@
 ﻿using Context;
-using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Threading;
 using VippsServicesApp.Properties;
 
@@ -7,8 +7,6 @@ namespace VippsServicesApp.Contexts
 {
     public partial class MainContext : ContextBase
     {
-        private ILogger<MainContext> Logger { get; }
-
         private int defaultIndex = Settings.Default.MainViewDefaultIndex;
         public int DefaultIndex
         {
@@ -48,14 +46,13 @@ namespace VippsServicesApp.Contexts
             //note: for UI designer
         }
 
-        public MainContext(IUIService uiService, ILogger<MainContext> logger, LogContext logContext, SettingsContext settingsContext, PaymentContext paymentContext)
+        public MainContext(IUIService uiService, LogContext logContext, SettingsContext settingsContext, PaymentContext paymentContext)
             : base(uiService) 
         {
+            Logging.Debug<MainContext>($"{nameof(MainContext)}");
             LogContext = logContext;
             SettingsContext = settingsContext;
             PaymentContext = paymentContext;
-            Logger = logger;
-            Logger.LogInformation("Context created.");
         }
 
         protected override string SetTitle()
@@ -65,7 +62,7 @@ namespace VippsServicesApp.Contexts
 
         internal void OnViewClosed()
         {
-            Logger.LogTrace("View closed.");
+            Logging.Information<MainContext>("Main view closed.");
 
             if (SelectedIndex == 0)
                 SelectedIndex = DefaultIndex;

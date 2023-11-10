@@ -19,20 +19,19 @@ namespace System.Extensions
             Exception error = exception;
             string message;
             bool insertSeparator = false;
+            Exception topError = exception;
 
             while (error != null)
             {
                 message = error is AggregateException
-                    ? string.Join(sep, ((AggregateException)error).InnerExceptions.Select(o => o.Message))
+                    ? error.Message + sep + string.Join(sep, ((AggregateException)error).InnerExceptions.Select(o => o.Message))
                     : string.IsNullOrWhiteSpace(error.Message) ? "Virheen tarkemmat tiedot puuttuu." : error.Message;
 
                 sb.Append(CreateRecord(message, sep, insertSeparator));
                 insertSeparator = true;
 
                 // AggregateException sets InnerException value for some reason, we use InnerExceptions collection to retrieve messages
-                // keep last visited error for stack trace
-                if (error is AggregateException
-                    || error.InnerException == null)
+                if (error is AggregateException)
                 {
                     break;
                 }
@@ -51,7 +50,7 @@ namespace System.Extensions
             {
                 sb.Clear();
                 sb.Append(result);
-                sb.Append(CreateRecord(error?.StackTrace ?? "No stack trace information.", sep + sep, true));
+                sb.Append(CreateRecord(topError.StackTrace ?? "No stack trace information.", sep + sep, true));
                 result = sb.ToString();
             }
 

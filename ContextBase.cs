@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -35,7 +34,7 @@ namespace Context
             title = SetTitle();
         }
 
-        protected ContextBase(IUIService uiService) 
+        protected ContextBase(IUIService uiService)
         {
             UIService = uiService;
             title = SetTitle();
@@ -43,8 +42,9 @@ namespace Context
 
         protected abstract string SetTitle();
 
-        protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
+            Logging.Debug<ContextBase>($"{nameof(OnPropertyChanged)}:{propertyName}");
             if (PropertyChanged == null)
                 throw new ArgumentNullException(nameof(propertyName));
             if (!GetType().GetProperties().Any(o => o.Name.Equals(propertyName)))

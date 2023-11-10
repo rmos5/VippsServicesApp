@@ -67,6 +67,7 @@ namespace VippsServicesApp
                     ConfigureServices(host, services);
                 })
                 .Build();
+
             Logging.SetLoggerFactory(_host.Services.GetRequiredService<ILoggerFactory>());
             
             _host.Start();

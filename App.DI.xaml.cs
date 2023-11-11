@@ -1,10 +1,8 @@
 ﻿using Context;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -21,7 +19,7 @@ namespace VippsServicesApp
         {
             loggerConfiguration.ReadFrom.Configuration(host.Configuration);
             string debugOutputTemplate = "[{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
-            loggerConfiguration.WriteTo.Debug(outputTemplate:debugOutputTemplate);
+            loggerConfiguration.WriteTo.Debug(outputTemplate: debugOutputTemplate);
             ILoggingSettings loggingSettings = serviceProvider.GetRequiredService<ILoggingSettings>();
             string logFileName = $"{host.HostingEnvironment.ApplicationName}.txt";
             string loggingFilePath = Path.Combine(loggingSettings.LoggingDirectoryPath, logFileName);
@@ -68,8 +66,7 @@ namespace VippsServicesApp
                 })
                 .Build();
 
-            Logging.SetLoggerFactory(_host.Services.GetRequiredService<ILoggerFactory>());
-            
+            Logging.ServiceProvider = _host.Services;
             _host.Start();
         }
 

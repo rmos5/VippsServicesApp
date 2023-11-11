@@ -1,165 +1,131 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 
 namespace VippsServicesApp
 {
     public static class Logging
     {
-        private class DefaultLoggerFactory : ILoggerFactory
-        {
-            private class TraceLogger<T> : ILogger
-            {
-                public string CategoryName { get; }
-
-                public TraceLogger(string categoryName)
-                {
-                    CategoryName = categoryName;
-                }
-
-                public IDisposable BeginScope<TState>(TState state)
-                {
-                    throw new NotSupportedException();
-                }
-
-                public bool IsEnabled(LogLevel logLevel)
-                {
-                    return true;
-                }
-
-                public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
-                {
-                    System.Diagnostics.Trace.WriteLine($"[{logLevel}] [{CategoryName}] {formatter.Invoke(state, exception)}");
-                }
-            }
-
-            private Dictionary<string, ILogger> Loggers { get; } = new Dictionary<string, ILogger>();
-
-            public void AddProvider(ILoggerProvider provider)
-            {
-            }
-
-            public ILogger CreateLogger(string categoryName)
-            {
-                ILogger result = null;
-                if (Loggers.ContainsKey(categoryName))
-                    result = Loggers[categoryName];
-                else
-                {
-                    result = new TraceLogger<string>(categoryName);
-                    Loggers[categoryName] = result;
-                }
-
-                return result;
-            }
-
-            public void Dispose()
-            {
-            }
-        }
-
         private static object _lock = new object();
 
-        private static ILoggerFactory LoggerFactory { get; set; } = new DefaultLoggerFactory();
-         
-        public static void SetLoggerFactory(ILoggerFactory loggerFactory)
-        {
-            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-        }
+        public static IServiceProvider ServiceProvider { get; set; }
 
         public static void Trace<T>(string message)
         {
-            if (LoggerFactory != null)
-            {
-                lock (_lock) LoggerFactory.CreateLogger<T>().LogTrace(message);
-            }
+            Trace(typeof(T), message);
+        }
+
+        public static void Trace(object source, string message)
+        {
+            Trace(source.GetType(), message);
         }
 
         public static void Trace(Type type, string message)
         {
-            if (LoggerFactory != null)
+            lock (_lock)
             {
-                lock (_lock) LoggerFactory.CreateLogger(type).LogTrace(message);
+                Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
+                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                logger?.LogTrace(message);
             }
         }
 
         public static void Debug<T>(string message)
         {
-            if (LoggerFactory != null)
-            {
-                lock (_lock) LoggerFactory.CreateLogger<T>().LogDebug(message);
-            }
+            Debug(typeof(T), message);
+        }
+
+        public static void Debug(object source, string message)
+        {
+            Debug(source.GetType(), message);
         }
 
         public static void Debug(Type type, string message)
         {
-            if (LoggerFactory != null)
+            lock (_lock)
             {
-                lock (_lock) LoggerFactory.CreateLogger(type).LogDebug(message);
+                Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
+                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                logger?.LogDebug(message);
             }
         }
 
         public static void Information<T>(string message)
         {
-            if (LoggerFactory != null)
-            {
-                lock (_lock) LoggerFactory.CreateLogger<T>().LogInformation(message);
-            }
+            Information(typeof(T), message);
+        }
+
+        public static void Information(object source, string message)
+        {
+            Information(source.GetType(), message);
         }
 
         public static void Information(Type type, string message)
         {
-            if (LoggerFactory != null)
+            lock (_lock)
             {
-                lock (_lock) LoggerFactory.CreateLogger(type).LogInformation(message);
+                Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
+                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                logger?.LogInformation(message);
             }
         }
 
         public static void Warning<T>(string message)
         {
-            if (LoggerFactory != null)
-            {
-                lock (_lock) LoggerFactory.CreateLogger<T>().LogWarning(message);
-            }
+            Warning(typeof(T), message);
+        }
+
+        public static void Warning(object source, string message)
+        {
+            Warning(source.GetType(), message);
         }
 
         public static void Warning(Type type, string message)
         {
-            if (LoggerFactory != null)
+            lock (_lock)
             {
-                lock (_lock) LoggerFactory.CreateLogger(type).LogWarning(message);
+                Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
+                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                logger?.LogWarning(message);
             }
         }
 
         public static void Error<T>(Exception error, string message)
         {
-            if (LoggerFactory != null)
-            {
-                lock (_lock) LoggerFactory.CreateLogger<T>().LogError(error, message);
-            }
+            Error(typeof(T), error, message);
+        }
+
+        public static void Error(object source, Exception error, string message)
+        {
+            Error(source.GetType(), error, message);
         }
 
         public static void Error(Type type, Exception error, string message)
         {
-            if (LoggerFactory != null)
+            lock (_lock)
             {
-                lock (_lock) LoggerFactory.CreateLogger(type).LogError(error, message);
+                Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
+                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                logger?.LogError(error, message);
             }
         }
 
-        public static void Critical<T>(string message)
+        public static void Critical<T>(Exception error, string message)
         {
-            if (LoggerFactory != null)
-            {
-                lock (_lock) LoggerFactory.CreateLogger<T>().LogCritical(message);
-            }
+            Critical(typeof(T), error, message);
         }
 
-        public static void Critical(Type type, string message)
+        public static void Critical(object source, Exception error, string message)
         {
-            if (LoggerFactory != null)
+            Critical(source.GetType(), error, message);
+        }
+
+        public static void Critical(Type type, Exception error, string message)
+        {
+            lock (_lock)
             {
-                lock (_lock) LoggerFactory.CreateLogger(type).LogCritical(message);
+                Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
+                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                logger?.LogCritical(error, message);
             }
         }
     }

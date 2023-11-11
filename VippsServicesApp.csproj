@@ -246,7 +246,7 @@
     <Compile Include="App.DI.xaml.cs" />
     <Compile Include="Contexts\CustomerContext.cs" />
     <Compile Include="ILoggingSettings.cs" />
-    <Compile Include="Logging.cs" />
+    <Compile Include="LoggingHelpers\Logging.cs" />
     <Compile Include="LoggingSettings.cs" />
     <Compile Include="System\ExceptionExtensions.cs" />
     <Compile Include="IUIService.cs" />

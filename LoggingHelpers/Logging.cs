@@ -2,7 +2,7 @@
 using System;
 using System.Extensions;
 
-namespace VippsServicesApp
+namespace SerilogHelpers
 {
     public static class Logging
     {

@@ -19,20 +19,20 @@ namespace VippsServicesApp
         private void ConfigureLogging(HostBuilderContext host, IServiceProvider serviceProvider, LoggerConfiguration loggerConfiguration)
         {
             loggerConfiguration.ReadFrom.Configuration(host.Configuration);
-            string debugOutputTemplate = "[{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
-            loggerConfiguration.WriteTo.Debug(outputTemplate: debugOutputTemplate);
-            ILoggingSettings loggingSettings = serviceProvider.GetRequiredService<ILoggingSettings>();
-            string logFileName = $"{host.HostingEnvironment.ApplicationName}.txt";
-            string loggingFilePath = Path.Combine(loggingSettings.LoggingDirectoryPath, logFileName);
-            string fileOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
-            loggerConfiguration.WriteTo.File
-                (loggingFilePath,
-                encoding: Encoding.UTF8,
-                fileSizeLimitBytes: 100000,
-                rollOnFileSizeLimit: true,
-                rollingInterval: RollingInterval.Hour,
-                retainedFileTimeLimit: TimeSpan.FromDays(100),
-                outputTemplate: fileOutputTemplate);
+            //string debugOutputTemplate = "[{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
+            //loggerConfiguration.WriteTo.Debug(outputTemplate: debugOutputTemplate);
+            //ILoggingSettings loggingSettings = serviceProvider.GetRequiredService<ILoggingSettings>();
+            //string logFileName = $"{host.HostingEnvironment.ApplicationName}.txt";
+            //string loggingFilePath = Path.Combine(loggingSettings.LoggingDirectoryPath, logFileName);
+            //string fileOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
+            //loggerConfiguration.WriteTo.File
+            //    (loggingFilePath,
+            //    encoding: Encoding.UTF8,
+            //    fileSizeLimitBytes: 100000,
+            //    rollOnFileSizeLimit: true,
+            //    rollingInterval: RollingInterval.Hour,
+            //    retainedFileTimeLimit: TimeSpan.FromDays(100),
+            //    outputTemplate: fileOutputTemplate);
         }
 
         private void ConfigureServices(HostBuilderContext host, IServiceCollection services)

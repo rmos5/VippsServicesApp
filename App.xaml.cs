@@ -35,7 +35,7 @@ namespace VippsServicesApp
             MainWindow.DataContext = _host.Services.GetRequiredService<MainContext>();
             MainWindow.Closing += MainWindow_Closing;
             MainWindow.Show();
-            Logging.Trace(this, $"Application started.");
+            Logging.Information(this, $"Application started.");
         }
 
         public void ShowErrorDialog(string message, Exception exception, string dialogTitle)

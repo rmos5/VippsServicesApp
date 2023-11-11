@@ -165,6 +165,9 @@
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.3.1.0\lib\net462\Serilog.dll</HintPath>
     </Reference>
+    <Reference Include="Serilog.Expressions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>packages\Serilog.Expressions.4.0.0\lib\netstandard2.0\Serilog.Expressions.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog.Extensions.Hosting, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.Extensions.Hosting.7.0.0\lib\net462\Serilog.Extensions.Hosting.dll</HintPath>
     </Reference>

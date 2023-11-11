@@ -3,6 +3,7 @@ using LoggingHelper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Filters;
 using System;
 using System.IO;
 using System.Reflection;
@@ -19,6 +20,10 @@ namespace VippsServicesApp
         private void ConfigureLogging(HostBuilderContext host, IServiceProvider serviceProvider, LoggerConfiguration loggerConfiguration)
         {
             loggerConfiguration.ReadFrom.Configuration(host.Configuration);
+            loggerConfiguration.WriteTo.Logger(lc => lc
+                .Filter.ByIncludingOnly
+(Matching.FromSource<App>())
+                .WriteTo.File(path: "Logs/App.txt"));
             //string debugOutputTemplate = "[{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
             //loggerConfiguration.WriteTo.Debug(outputTemplate: debugOutputTemplate);
             //ILoggingSettings loggingSettings = serviceProvider.GetRequiredService<ILoggingSettings>();

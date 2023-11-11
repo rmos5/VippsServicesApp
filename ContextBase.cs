@@ -1,8 +1,8 @@
+using LoggingHelper;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using VippsServicesApp;
 
 namespace Context
 {

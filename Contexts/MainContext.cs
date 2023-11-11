@@ -1,4 +1,5 @@
 ﻿using Context;
+using LoggingHelper;
 using System.Diagnostics;
 using System.Threading;
 using VippsServicesApp.Properties;

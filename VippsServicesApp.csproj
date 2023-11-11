@@ -248,7 +248,7 @@
     <Compile Include="ILoggingSettings.cs" />
     <Compile Include="LoggingHelpers\Logging.cs" />
     <Compile Include="LoggingSettings.cs" />
-    <Compile Include="System\ExceptionExtensions.cs" />
+    <Compile Include="LoggingHelpers\ExceptionExtensions.cs" />
     <Compile Include="IUIService.cs" />
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Services\IPaymentService.cs" />
@@ -351,6 +351,8 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="System\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

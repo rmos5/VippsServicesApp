@@ -1,8 +1,8 @@
 ﻿using Context;
+using LoggingHelper;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Extensions;
 using VippsApi;
 using VippsServicesApp.Services;
 

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace System.Extensions
+namespace LoggingHelper
 {
     //todo: localize
     public static class ExceptionExtensions

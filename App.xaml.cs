@@ -1,8 +1,8 @@
 ﻿using Context;
+using LoggingHelper;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel;
-using System.Extensions;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows;

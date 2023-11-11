@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Extensions;
 
-namespace SerilogHelpers
+namespace LoggingHelper
 {
     public static class Logging
     {

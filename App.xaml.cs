@@ -50,9 +50,9 @@ namespace VippsServicesApp
 
         protected override void OnExit(ExitEventArgs e)
         {
+            Logging.Information(this, "Application exit.");
             StopDI();
             base.OnExit(e);
         }
-
     }
 }

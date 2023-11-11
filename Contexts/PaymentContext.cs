@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Extensions;
 using VippsApi;
 using VippsServicesApp.Services;
@@ -42,7 +41,7 @@ namespace VippsServicesApp.Contexts
         public PaymentContext(IUIService uiService, ILogger<PaymentContext> logger, IVippsPaymentService paymentService)
             : base(uiService)
         {
-            Logging.Debug<PaymentContext>($"{nameof(PaymentContext)}");
+            Logging.Debug(this, $"{nameof(PaymentContext)}");
             PaymentService = paymentService;
             Logger = logger;
             PaymentCommand = new PaymentCommandImpl(this);
@@ -105,8 +104,9 @@ namespace VippsServicesApp.Contexts
             }
             catch (Exception ex)
             {
-                Logging.Error<PaymentContext>(ex, "Payment failed");
-                UIService.ShowErrorDialog("Payment failed.", ex, "Payment");
+                string message = "Payment failed.";
+                Logging.Error(this, ex, message);
+                UIService.ShowErrorDialog(message, ex, "Payment");
             }
         }
     }

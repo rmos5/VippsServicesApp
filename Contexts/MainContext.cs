@@ -49,7 +49,7 @@ namespace VippsServicesApp.Contexts
         public MainContext(IUIService uiService, LogContext logContext, SettingsContext settingsContext, PaymentContext paymentContext)
             : base(uiService) 
         {
-            Logging.Debug<MainContext>($"{nameof(MainContext)}");
+            Logging.Debug(this, $"{nameof(MainContext)}");
             LogContext = logContext;
             SettingsContext = settingsContext;
             PaymentContext = paymentContext;
@@ -62,7 +62,7 @@ namespace VippsServicesApp.Contexts
 
         internal void OnViewClosed()
         {
-            Logging.Information<MainContext>("Main view closed.");
+            Logging.Information(this, "Main view closed.");
 
             if (SelectedIndex == 0)
                 SelectedIndex = DefaultIndex;

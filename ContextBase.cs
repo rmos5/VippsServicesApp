@@ -44,7 +44,7 @@ namespace Context
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            Logging.Debug(GetType(), $"{nameof(OnPropertyChanged)}:{propertyName}");
+            Logging.Debug(this, $"{nameof(OnPropertyChanged)}:{propertyName}");
             if (PropertyChanged == null)
                 throw new ArgumentNullException(nameof(propertyName));
             if (!GetType().GetProperties().Any(o => o.Name.Equals(propertyName)))

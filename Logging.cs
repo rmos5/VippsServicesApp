@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Extensions;
 
 namespace VippsServicesApp
 {
@@ -8,6 +9,8 @@ namespace VippsServicesApp
         private static object _lock = new object();
 
         public static IServiceProvider ServiceProvider { get; set; }
+
+        public static bool IncludeStackTrace { get; set; }
 
         public static void Trace<T>(string message)
         {
@@ -89,6 +92,11 @@ namespace VippsServicesApp
             }
         }
 
+        private static string GetErrorMessage(string message, Exception error)
+        {
+            return message + Environment.NewLine + error.GetAllMessages();
+        }
+
         public static void Error<T>(Exception error, string message)
         {
             Error(typeof(T), error, message);
@@ -105,7 +113,10 @@ namespace VippsServicesApp
             {
                 Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
                 ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
-                logger?.LogError(error, message);
+                if (IncludeStackTrace)
+                    logger?.LogError(error, message);
+                else
+                    logger?.LogError(GetErrorMessage(message, error));
             }
         }
 
@@ -125,7 +136,10 @@ namespace VippsServicesApp
             {
                 Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
                 ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
-                logger?.LogCritical(error, message);
+                if (IncludeStackTrace)
+                    logger?.LogCritical(error, message);
+                else
+                    logger?.LogCritical(GetErrorMessage(message, error));
             }
         }
     }

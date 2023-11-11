@@ -67,6 +67,7 @@ namespace VippsServicesApp
                 .Build();
 
             Logging.ServiceProvider = _host.Services;
+            //Logging.IncludeStackTrace = true;
             _host.Start();
         }
 

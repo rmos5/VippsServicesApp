@@ -24,8 +24,8 @@ namespace System.Extensions
             while (error != null)
             {
                 message = error is AggregateException
-                    ? error.Message + sep + string.Join(sep, ((AggregateException)error).InnerExceptions.Select(o => o.Message))
-                    : string.IsNullOrWhiteSpace(error.Message) ? "Virheen tarkemmat tiedot puuttuu." : error.Message;
+                    ? error.Message + sep + string.Join(sep, ((AggregateException)error).InnerExceptions.Select(o => o.GetType().FullName + ": " + o.Message))
+                    : error.GetType().FullName + ": " + error.Message;
 
                 sb.Append(CreateRecord(message, sep, insertSeparator));
                 insertSeparator = true;

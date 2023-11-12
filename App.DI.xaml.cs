@@ -21,7 +21,7 @@ namespace VippsServicesApp
         {
             loggerConfiguration.ReadFrom.Configuration(host.Configuration);
             string debugOutputTemplate = "[{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
-            loggerConfiguration.WriteTo.Debug(outputTemplate: debugOutputTemplate);
+            loggerConfiguration.WriteTo.Debug(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Verbose, outputTemplate: debugOutputTemplate);
             //note: preserved as a sample configuration code
             //loggerConfiguration.WriteTo.Logger(lc => lc
             //  .Filter.ByIncludingOnly(Matching.FromSource<App>())

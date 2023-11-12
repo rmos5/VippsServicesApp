@@ -24,10 +24,10 @@ namespace VippsServicesApp
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            identity.Impersonate();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            Thread.CurrentPrincipal = principal;
+            //WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            //identity.Impersonate();
+            //WindowsPrincipal principal = new WindowsPrincipal(identity);
+            //Thread.CurrentPrincipal = principal;
 
             StartDI(e.Args);
             Logging.Trace(this, $"{nameof(OnStartup)}");

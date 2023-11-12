@@ -163,7 +163,7 @@
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>packages\Serilog.3.1.0\lib\net462\Serilog.dll</HintPath>
+      <HintPath>packages\Serilog.3.1.1\lib\net462\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Expressions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.Expressions.4.0.0\lib\netstandard2.0\Serilog.Expressions.dll</HintPath>
@@ -173,6 +173,9 @@
     </Reference>
     <Reference Include="Serilog.Extensions.Logging, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.Extensions.Logging.7.0.0\lib\net462\Serilog.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Formatting.Elasticsearch, Version=9.0.3.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>packages\Serilog.Formatting.Elasticsearch.9.0.3\lib\netstandard2.0\Serilog.Formatting.Elasticsearch.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Settings.Configuration, Version=7.0.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.Settings.Configuration.7.0.1\lib\net462\Serilog.Settings.Configuration.dll</HintPath>

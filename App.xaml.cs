@@ -3,8 +3,6 @@ using LoggingHelper;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel;
-using System.Security.Principal;
-using System.Threading;
 using System.Windows;
 using VippsServicesApp.Contexts;
 
@@ -15,11 +13,8 @@ namespace VippsServicesApp
     /// </summary>
     public partial class App : Application, IUIService
     {
-        private string LogCategory { get; }
-
         public App()
         {
-            LogCategory = GetType().FullName;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -30,12 +25,12 @@ namespace VippsServicesApp
             //Thread.CurrentPrincipal = principal;
 
             StartDI(e.Args);
-            Logging.Trace(this, $"{nameof(OnStartup)}");
+            Log.Trace(this, $"{nameof(OnStartup)}");
             MainWindow = new MainWindow();
             MainWindow.DataContext = _host.Services.GetRequiredService<MainContext>();
             MainWindow.Closing += MainWindow_Closing;
             MainWindow.Show();
-            Logging.Information(this, $"Application started.");
+            Log.Information(this, $"Application started.");
         }
 
         public void ShowErrorDialog(string message, Exception exception, string dialogTitle)
@@ -45,12 +40,12 @@ namespace VippsServicesApp
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            Logging.Trace(this, $"{nameof(MainWindow_Closing)}:Cancel={e.Cancel}");
+            Log.Trace(this, $"{nameof(MainWindow_Closing)}:Cancel={e.Cancel}");
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            Logging.Information(this, "Application exit.");
+            Log.Information(this, "Application exit.");
             StopDI();
             base.OnExit(e);
         }

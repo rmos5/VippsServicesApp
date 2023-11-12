@@ -38,7 +38,7 @@ namespace VippsServicesApp.Contexts
         public LogContext(IUIService uiService, ILoggingSettings settings)
             :base(uiService)
         {
-            Logging.Debug(this, $"{nameof(LogContext)}");
+            Log.Debug(this, $"{nameof(LogContext)}");
             Settings = settings;
             CreateDirectoryCommand = new CreateDirectoryCommandImpl(this);
         }

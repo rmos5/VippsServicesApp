@@ -41,7 +41,7 @@ namespace VippsServicesApp.Contexts
         public PaymentContext(IUIService uiService, ILogger<PaymentContext> logger, IVippsPaymentService paymentService)
             : base(uiService)
         {
-            Logging.Debug(this, $"{nameof(PaymentContext)}");
+            Log.Debug(this, $"{nameof(PaymentContext)}");
             PaymentService = paymentService;
             Logger = logger;
             PaymentCommand = new PaymentCommandImpl(this);
@@ -105,7 +105,7 @@ namespace VippsServicesApp.Contexts
             catch (Exception ex)
             {
                 string message = "Payment failed.";
-                Logging.Error(this, ex, message);
+                Log.Error(this, ex, message);
                 UIService.ShowErrorDialog(message, ex, "Payment");
             }
         }

@@ -253,7 +253,7 @@
     <Compile Include="Contexts\CustomerContext.cs" />
     <Compile Include="ILoggingSettings.cs" />
     <Compile Include="LoggingHelpers\ExceptionExtensions.cs" />
-    <Compile Include="LoggingHelpers\Logging.cs" />
+    <Compile Include="LoggingHelpers\Log.cs" />
     <Compile Include="LoggingSettings.cs" />
     <Compile Include="IUIService.cs" />
     <Compile Include="Properties\Settings.cs" />

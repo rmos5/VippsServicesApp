@@ -3,13 +3,28 @@ using System;
 
 namespace LoggingHelper
 {
-    public static class Logging
+    public static class Log
     {
         private static object _lock = new object();
 
         public static IServiceProvider ServiceProvider { get; set; }
 
         public static bool IncludeStackTrace { get; set; }
+
+        private static ILogger GetLogger(Type type)
+        {
+            ILogger result = null;
+            try
+            {
+                result = ServiceProvider?.GetService(type) as ILogger;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(ex.GetAllMessages());
+            }
+            
+            return result;
+        }
 
         public static void Trace<T>(string message)
         {
@@ -26,7 +41,7 @@ namespace LoggingHelper
             lock (_lock)
             {
                 Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
-                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                ILogger logger = GetLogger(loggerType);
                 logger?.LogTrace(message);
             }
         }
@@ -46,7 +61,7 @@ namespace LoggingHelper
             lock (_lock)
             {
                 Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
-                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                ILogger logger = GetLogger(loggerType);
                 logger?.LogDebug(message);
             }
         }
@@ -66,7 +81,7 @@ namespace LoggingHelper
             lock (_lock)
             {
                 Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
-                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                ILogger logger = GetLogger(loggerType);
                 logger?.LogInformation(message);
             }
         }
@@ -86,7 +101,7 @@ namespace LoggingHelper
             lock (_lock)
             {
                 Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
-                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                ILogger logger = GetLogger(loggerType);
                 logger?.LogWarning(message);
             }
         }
@@ -111,7 +126,7 @@ namespace LoggingHelper
             lock (_lock)
             {
                 Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
-                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                ILogger logger = GetLogger(loggerType);
                 if (IncludeStackTrace)
                     logger?.LogError(error, message);
                 else
@@ -134,7 +149,7 @@ namespace LoggingHelper
             lock (_lock)
             {
                 Type loggerType = typeof(ILogger<>).MakeGenericType(new[] { type });
-                ILogger logger = ServiceProvider?.GetService(loggerType) as ILogger;
+                ILogger logger = GetLogger(loggerType);
                 if (IncludeStackTrace)
                     logger?.LogCritical(error, message);
                 else

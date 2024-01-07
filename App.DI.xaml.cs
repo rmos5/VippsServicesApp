@@ -1,13 +1,10 @@
 ﻿using Context;
-using LoggingHelper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Filters;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using VippsServicesApp.Contexts;
 using VippsServicesApp.Services;
 

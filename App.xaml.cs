@@ -15,6 +15,13 @@ namespace VippsServicesApp
     {
         public App()
         {
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
+        }
+
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            _host.Services.GetRequiredService<IUIService>().ShowErrorDialog(e.Exception, "Unhandled error");
+            e.Handled = true;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -35,7 +42,18 @@ namespace VippsServicesApp
 
         public void ShowErrorDialog(string message, Exception exception, string dialogTitle)
         {
-            MessageBox.Show(MainWindow, $"{message}\n{exception.GetAllMessages()}", dialogTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            string msg;
+            if (message?.Trim()?.Length > 0)
+                msg = $"{message}\n{exception.GetAllMessages()}";
+            else
+                msg = $"{exception.GetAllMessages()}";
+
+            MessageBox.Show(MainWindow, msg, dialogTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public void ShowErrorDialog(Exception exception, string dialogTitle)
+        {
+            ShowErrorDialog(null, exception, dialogTitle);
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)

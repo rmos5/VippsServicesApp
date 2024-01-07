@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:VippsServicesApp.Views"
         mc:Ignorable="d"
         Title="{Binding ElementName=mainView, Path=DataContext.Title}" 
-        Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Height="450" Width="800" WindowStartupLocation="CenterScreen" FontSize="20">
 
     <views:MainView x:Name="mainView"/>
 

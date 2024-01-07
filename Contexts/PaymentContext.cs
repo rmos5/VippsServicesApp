@@ -10,20 +10,21 @@ namespace VippsServicesApp.Contexts
 {
     public partial class PaymentContext : ContextBase
     {
-        private sealed class PaymentCommandImpl : CommandBase<PaymentContext>
+        private sealed class PaymentFlowSelectionCommandImpl : CommandBase<PaymentContext>
         {
-            public PaymentCommandImpl(PaymentContext context) : base(context)
+            public PaymentFlowSelectionCommandImpl(PaymentContext context) : base(context)
             {
             }
 
             public override bool CanExecute(object parameter)
             {
-                return Context.CanExecutePaymentCommand(parameter);
+                return parameter is PaymentFlows
+                    && Context.CanExecutePaymentCommand((PaymentFlows)parameter);
             }
 
             public override void Execute(object parameter)
             {
-                Context.ExecutePaymentCommand(parameter);
+                Context.ExecutePaymentCommand((PaymentFlows)parameter);
             }
         }
 
@@ -31,7 +32,46 @@ namespace VippsServicesApp.Contexts
 
         private IVippsPaymentService PaymentService { get; }
 
-        public CommandBase PaymentCommand { get; }
+        public CommandBase PaymentFlowSelectionCommand { get; }
+
+        private PaymentFlows paymentFlow;
+
+        public PaymentFlows PaymentFlow
+        {
+            get { return paymentFlow; }
+            set
+            {
+                if (paymentFlow != value)
+                {
+                    paymentFlow = value;
+                    OnPropertyChanged(nameof(PaymentFlow));
+                    OnPropertyChanged(nameof(IsCustomerQRFlow));
+                    OnPropertyChanged(nameof(IsPaymentQRFlow));
+                }
+            }
+        }
+
+        public bool IsCustomerQRFlow => PaymentFlow == PaymentFlows.CustomerQR;
+
+        public bool IsPaymentQRFlow => PaymentFlow == PaymentFlows.PaymentQR;
+
+        private decimal? paymentAmount;
+
+        public decimal? PaymentAmount
+        {
+            get { return paymentAmount; }
+            set
+            {
+                if (paymentAmount.HasValue && paymentAmount.Value != value
+                    || !paymentAmount.HasValue && value.HasValue)
+                {
+                    paymentAmount = value;
+                    OnPropertyChanged(nameof(PaymentAmount));
+                }
+            }
+        }
+
+        public string PaymentAmountText => "Summa...";
 
         public PaymentContext()
         {
@@ -44,7 +84,7 @@ namespace VippsServicesApp.Contexts
             Log.Debug(this, $"{nameof(PaymentContext)}");
             PaymentService = paymentService;
             Logger = logger;
-            PaymentCommand = new PaymentCommandImpl(this);
+            PaymentFlowSelectionCommand = new PaymentFlowSelectionCommandImpl(this);
         }
 
         protected override string SetTitle()
@@ -52,16 +92,42 @@ namespace VippsServicesApp.Contexts
             return "Payment";
         }
 
-        private bool CanExecutePaymentCommand(object parameter)
+        private void UpdateModelState()
         {
-            return true;
+            PaymentFlowSelectionCommand.RaiseCanExecuteChanged();
         }
 
-        private void ExecutePaymentCommand(object parameter)
+        private bool CanExecutePaymentCommand(PaymentFlows paymentFlow)
+        {
+            return paymentFlow != PaymentFlow;
+        }
+
+        private void ExecutePaymentCommand(PaymentFlows paymentFlow)
+        {
+            Logger.LogInformation($"{nameof(ExecutePaymentCommand)}:{paymentFlow}...");
+
+            switch (paymentFlow)
+            {
+                case PaymentFlows.Unknown:
+                    throw new NotSupportedException();
+                case PaymentFlows.CustomerQR:
+                    PaymentFlow = PaymentFlows.CustomerQR;
+                    break;
+                case PaymentFlows.PaymentQR:
+                    PaymentFlow = PaymentFlows.CustomerQR;
+                    throw new NotImplementedException();    
+                default:
+                    break;
+            }
+
+            UpdateModelState();
+        }
+
+        private void ExecutePayment()
         {
             try
             {
-                Logger.LogInformation($"{nameof(ExecutePaymentCommand)}...");
+                Logger.LogInformation($"{nameof(ExecutePayment)}...");
 
                 string description = "First receipt to pay";
                 Currency currency = Currency.EUR;

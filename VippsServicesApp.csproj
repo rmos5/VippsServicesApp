@@ -357,6 +357,11 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\RmsoftControlsProjects\RmsoftControls\RmsoftControls.csproj">
+      <Project>{4051d6dc-312e-4c0d-83f4-e80c4128d2d8}</Project>
+      <Name>RmsoftControls</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
